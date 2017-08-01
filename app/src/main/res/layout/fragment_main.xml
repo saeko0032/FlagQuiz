@@ -17,7 +17,7 @@
         android:id="@+id/questionNumberTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:margin="@dimen/spacing"
+        android:layout_margin="@dimen/spacing"
         android:text="@string/question"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/spacing"
