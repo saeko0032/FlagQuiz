@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import static android.R.attr.path;
 
 public class MainActivityFragment extends Fragment {
     private int FLAGS_IN_QUIZ = 1;
+    int count = 0;
 
     private List<String> fileNameList;
     private List<String> quizCountriesList;
@@ -66,15 +68,65 @@ public class MainActivityFragment extends Fragment {
         guessLinearLayouts[3] = (LinearLayout)view.findViewById(R.id.row4LinearLayout);
 
         answerTextView = (TextView) view.findViewById(R.id.answerTextView);
+        answerTextView.setText(" ");
 
         questionNumberTextView.setText(getString(R.string.question, FLAGS_IN_QUIZ));
+
+        for (LinearLayout row : guessLinearLayouts) {
+            for (int column = 0; column < row.getChildCount(); column++) {
+                Button button = (Button) row.getChildAt(column);
+                button.setOnClickListener(guessButtonListener);
+            }
+        }
 
         return view;
     }
 
+    private View.OnClickListener guessButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Button guessButton = ((Button) v);
+            String guess = ((Button) v).getText().toString();
+            String answer = getCountryName(correctAnswer);
+
+            //if the guess is correct
+            // display correct answer in green text
+            if(guess.equals(answer))
+            {
+                count++;
+                answerTextView.setText(answer + "!");
+                //set the text in green Color
+                disableAllButtons();
+            }
+            else
+            {
+                //  flagImageView.startAnimation(shakeAnimation); // play shake
+
+                // display "Incorrect!" in red
+                answerTextView.setText(R.string.incorrect_answer);
+                //set the text in red Color
+                guessButton.setEnabled(false); // disable incorrect answer
+            }
+
+        }
+    };
+
+    // utility method that disables all answer Buttons
+    public void disableAllButtons()
+    {
+        for(int row=0;row<guessRows;row++)
+        {
+            LinearLayout guessRow = guessLinearLayouts[row];
+            for(int i=0;i<guessRow.getChildCount();i++)
+            {
+                guessRow.getChildAt(i).setEnabled(false);
+            }
+        }
+    }
+
     public void updateGuessRows(SharedPreferences sharedPreferences) {
         String choices = sharedPreferences.getString(MainActivity.CHOICES, null);
-        guessRows = Integer.parseInt(choices);
+        guessRows = Integer.parseInt(choices)/2;
 
         for(LinearLayout layout: guessLinearLayouts) {
             layout.setVisibility(View.GONE);
@@ -89,7 +141,7 @@ public class MainActivityFragment extends Fragment {
         regionSet = sharedPreferences.getStringSet(MainActivity.REGIONS, null);
     }
 
-    public void startQuize() {
+    public void startQuiz() {
         int i = 0;
         AssetManager assets = getActivity().getAssets();
         try {
@@ -114,6 +166,7 @@ public class MainActivityFragment extends Fragment {
                 ++flagCounter;
             }
         }
+        loadFlags();
     }
 
         private void loadFlags() {
