@@ -1,5 +1,6 @@
 package com.example.saeko.flagquizapp;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
@@ -31,9 +32,9 @@ import static android.R.attr.path;
  * Created by saeko on 8/1/2017.
  */
 
-public class MainActivityFragment extends Fragment {
-    private int FLAGS_IN_QUIZ = 1;
-    int count = 0;
+public class MainActivityFragment extends Fragment implements Dialog {
+    private int FLAGS_IN_QUIZ = 10;
+    int count = 1;
 
     private List<String> fileNameList;
     private List<String> quizCountriesList;
@@ -70,7 +71,7 @@ public class MainActivityFragment extends Fragment {
         answerTextView = (TextView) view.findViewById(R.id.answerTextView);
         answerTextView.setText(" ");
 
-        questionNumberTextView.setText(getString(R.string.question, FLAGS_IN_QUIZ));
+        questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
 
         for (LinearLayout row : guessLinearLayouts) {
             for (int column = 0; column < row.getChildCount(); column++) {
@@ -97,10 +98,19 @@ public class MainActivityFragment extends Fragment {
                 answerTextView.setText(answer + "!");
                 //set the text in green Color
                 disableAllButtons();
+                loadFlags();
+                questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
+//                if(count <= 10) {
+//                    handler.postDelayed{
+//                        () -> { loadFlags();
+//
+//                        }, 2000;
+//                    }
+//                }
             }
             else
             {
-                //  flagImageView.startAnimation(shakeAnimation); // play shake
+               // flagImageView.startAnimation(shakeAnimation); // play shake
 
                 // display "Incorrect!" in red
                 answerTextView.setText(R.string.incorrect_answer);
@@ -170,7 +180,9 @@ public class MainActivityFragment extends Fragment {
     }
 
         private void loadFlags() {
-        String nextImage = quizCountriesList.remove(0);
+
+            String nextImage = quizCountriesList.remove(0);
+
         correctAnswer = nextImage;
 
         String region = nextImage.substring(0, nextImage.indexOf('-'));
@@ -180,7 +192,7 @@ public class MainActivityFragment extends Fragment {
             Drawable flag = Drawable.createFromStream(stream, nextImage);
             flagImageView.setImageDrawable(flag);
         } catch (IOException exception) {
-            Log.e("In the flag quize", "Error loading" + nextImage, exception);
+            Log.e("In the flag quiz", "Error loading" + nextImage, exception);
         }
 
         Collections.shuffle(fileNameList);
