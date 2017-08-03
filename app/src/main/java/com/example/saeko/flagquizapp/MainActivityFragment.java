@@ -40,7 +40,7 @@ import static java.lang.Thread.sleep;
 public class MainActivityFragment extends Fragment {
     private int FLAGS_IN_QUIZ = 10;
     int count = 1;
-    public int guessCount = 0;
+    public static int guessCount = 0;
 
     private List<String> fileNameList;
     private List<String> quizCountriesList;
@@ -95,9 +95,9 @@ public class MainActivityFragment extends Fragment {
         return view;
     }
 
-    public int getGuessCount() {
-        return guessCount;
-    }
+//    public int getGuessCount() {
+//        return guessCount;
+//    }
 
     private View.OnClickListener guessButtonListener = new View.OnClickListener() {
         @Override
@@ -130,9 +130,9 @@ public class MainActivityFragment extends Fragment {
                     }, 400);
                 } else {
                     ResultDialogAlert dialog = new ResultDialogAlert ();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("count",guessCount);
-                    dialog.setArguments(bundle);
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("count",guessCount);
+//                    dialog.setArguments(bundle);
                     dialog.show(getActivity().getFragmentManager(),"temp");
                   //  dialog.show();
                 }
