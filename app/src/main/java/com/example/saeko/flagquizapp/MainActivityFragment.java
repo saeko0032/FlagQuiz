@@ -1,16 +1,20 @@
 package com.example.saeko.flagquizapp;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,14 +31,16 @@ import java.util.List;
 import java.util.Set;
 
 import static android.R.attr.path;
+import static java.lang.Thread.sleep;
 
 /**
  * Created by saeko on 8/1/2017.
  */
 
-public class MainActivityFragment extends Fragment implements Dialog {
+public class MainActivityFragment extends Fragment {
     private int FLAGS_IN_QUIZ = 10;
     int count = 1;
+    public int guessCount = 0;
 
     private List<String> fileNameList;
     private List<String> quizCountriesList;
@@ -48,6 +54,8 @@ public class MainActivityFragment extends Fragment implements Dialog {
     private SecureRandom random;
     private String correctAnswer;
     private int guessRows;
+    private Animation shakeAnimation;
+    private Animation flipInAnimation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +79,10 @@ public class MainActivityFragment extends Fragment implements Dialog {
         answerTextView = (TextView) view.findViewById(R.id.answerTextView);
         answerTextView.setText(" ");
 
+        shakeAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.incorrect_shake);
+        shakeAnimation.setRepeatCount(2);
+        flipInAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.flip_left_in);
+
         questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
 
         for (LinearLayout row : guessLinearLayouts) {
@@ -83,6 +95,10 @@ public class MainActivityFragment extends Fragment implements Dialog {
         return view;
     }
 
+    public int getGuessCount() {
+        return guessCount;
+    }
+
     private View.OnClickListener guessButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -90,30 +106,46 @@ public class MainActivityFragment extends Fragment implements Dialog {
             String guess = ((Button) v).getText().toString();
             String answer = getCountryName(correctAnswer);
 
+            guessCount++;
+
             //if the guess is correct
             // display correct answer in green text
+            flagImageView.startAnimation(flipInAnimation);
             if(guess.equals(answer))
             {
                 count++;
                 answerTextView.setText(answer + "!");
+                answerTextView.setTextColor(getResources().getColor(R.color.correct_answer));
                 //set the text in green Color
                 disableAllButtons();
-                loadFlags();
-                questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
-//                if(count <= 10) {
-//                    handler.postDelayed{
-//                        () -> { loadFlags();
-//
-//                        }, 2000;
-//                    }
-//                }
+
+                if (count <= 10) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
+                            loadFlags();
+                        }
+                    }, 400);
+                } else {
+                    ResultDialogAlert dialog = new ResultDialogAlert ();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("count",guessCount);
+                    dialog.setArguments(bundle);
+                    dialog.show(getActivity().getFragmentManager(),"temp");
+                  //  dialog.show();
+                }
+
             }
             else
             {
-               // flagImageView.startAnimation(shakeAnimation); // play shake
+                flagImageView.startAnimation(shakeAnimation); // play shake
+                answerTextView.startAnimation(shakeAnimation);
 
                 // display "Incorrect!" in red
                 answerTextView.setText(R.string.incorrect_answer);
+                answerTextView.setTextColor(getResources().getColor(R.color.incorrect_answer));
                 //set the text in red Color
                 guessButton.setEnabled(false); // disable incorrect answer
             }
