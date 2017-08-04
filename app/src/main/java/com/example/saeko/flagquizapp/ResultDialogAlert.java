@@ -27,7 +27,7 @@ public class ResultDialogAlert extends DialogFragment {
         totalGuess = MainActivityFragment.guessCount;
 
         dialog.setMessage("Your score is " + 1000/totalGuess + " %. \n" + "You took "+ totalGuess + " times for guessing. \n\n Do you want to Restart the Quiz?")
-                .setPositiveButton("RESET_QUIZ", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.reset_quiz, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Activity activity = getActivity();
@@ -37,7 +37,7 @@ public class ResultDialogAlert extends DialogFragment {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT);

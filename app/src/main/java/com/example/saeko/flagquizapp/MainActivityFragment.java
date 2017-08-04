@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -180,6 +181,11 @@ public class MainActivityFragment extends Fragment {
     public void startQuiz() {
         int i = 0;
         AssetManager assets = getActivity().getAssets();
+
+        if(regionSet.size() == 0) {
+            regionSet.add("North_America");
+        }
+
         try {
             for (String region : regionSet) {
                 String[] paths = assets.list(region);
@@ -188,7 +194,7 @@ public class MainActivityFragment extends Fragment {
                 }
             }
         } catch (IOException exception) {
-            Log.e("IN FLAG QUIZE : ", "ERROR LOADING IMAGE FILE NAMES", exception);
+            Log.e("IN FLAG QUIZ : ", "ERROR LOADING IMAGE FILE NAMES", exception);
         }
 
         int flagCounter = 1;

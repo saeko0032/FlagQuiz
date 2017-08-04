@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">国旗当てクイズ</string>
+    <string name="title_activity_settings">設定</string>
+    <string name="action_settings">設定</string>
+    <string name="number_of_choices_description">選択肢</string>
+    <string name="world_regions">地域</string>
+    <string name="world_regions_description">地域を選択</string>
+    <string name="guess_country">どこの国でしょう？</string>
+    <string name="results">%1$d 問中, %2$.02f%% 正解</string>
+    <string name="incorrect_answer">不正解!</string>
+    <string name="default_region_message">少なくとも一つの地域を含めてください</string>
+    <string name="restarting_quiz">クイズを再起動します</string>
+    <string name="question"> %1$d / %2$d</string>
+    <string name="reset_quiz">リセット</string>
+    <string name="cancel">キャンセル</string>
+    <string name="image_description">現在の国旗</string>
+    <string name="default_region">北米</string>
+    <string name="number_of_choices">6</string></resources>

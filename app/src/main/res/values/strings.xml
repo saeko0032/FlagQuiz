@@ -11,7 +11,8 @@
     <string name="default_region_message">One region must be selected. Setting def.</string>
     <string name="restarting_quiz">Quiz will restart with your new settings</string>
     <string name="question">Question %1$d of %2$d</string>
-    <string name="reset_qiuz">Reset Quiz</string>
+    <string name="reset_quiz">Reset Quiz</string>
+    <string name="cancel">Cancel</string>
     <string name="image_description">Image of the current flag in the quiz</string>
     <string name="default_region">North_America</string>
     <string name="number_of_choices">6</string>
