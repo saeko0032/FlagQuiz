@@ -67,21 +67,21 @@ public class MainActivityFragment extends Fragment {
         quizCountriesList = new ArrayList<>();
 
         quizLinearLayout = (LinearLayout) view.findViewById(R.id.quizLinearLayout);
-        questionNumberTextView = (TextView)view.findViewById(R.id.questionNumberTextView);
-        flagImageView = (ImageView)view.findViewById(R.id.flagImageView);
+        questionNumberTextView = (TextView) view.findViewById(R.id.questionNumberTextView);
+        flagImageView = (ImageView) view.findViewById(R.id.flagImageView);
 
         guessLinearLayouts = new LinearLayout[4];
-        guessLinearLayouts[0] = (LinearLayout)view.findViewById(R.id.row1LinearLayout);
-        guessLinearLayouts[1] = (LinearLayout)view.findViewById(R.id.row2LinearLayout);
-        guessLinearLayouts[2] = (LinearLayout)view.findViewById(R.id.row3LinearLayout);
-        guessLinearLayouts[3] = (LinearLayout)view.findViewById(R.id.row4LinearLayout);
+        guessLinearLayouts[0] = (LinearLayout) view.findViewById(R.id.row1LinearLayout);
+        guessLinearLayouts[1] = (LinearLayout) view.findViewById(R.id.row2LinearLayout);
+        guessLinearLayouts[2] = (LinearLayout) view.findViewById(R.id.row3LinearLayout);
+        guessLinearLayouts[3] = (LinearLayout) view.findViewById(R.id.row4LinearLayout);
 
         answerTextView = (TextView) view.findViewById(R.id.answerTextView);
         answerTextView.setText(" ");
 
-        shakeAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.incorrect_shake);
+        shakeAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.incorrect_shake);
         shakeAnimation.setRepeatCount(2);
-        flipInAnimation = AnimationUtils.loadAnimation(getActivity(),R.anim.flip_left_in);
+        flipInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.flip_left_in);
 
         questionNumberTextView.setText(getString(R.string.question, count, FLAGS_IN_QUIZ));
 
@@ -111,8 +111,7 @@ public class MainActivityFragment extends Fragment {
             //if the guess is correct
             // display correct answer in green text
             flagImageView.startAnimation(flipInAnimation);
-            if(guess.equals(answer))
-            {
+            if (guess.equals(answer)) {
                 count++;
                 answerTextView.setText(answer + "!");
                 answerTextView.setTextColor(getResources().getColor(R.color.correct_answer));
@@ -129,17 +128,15 @@ public class MainActivityFragment extends Fragment {
                         }
                     }, 400);
                 } else {
-                    ResultDialogAlert dialog = new ResultDialogAlert ();
+                    ResultDialogAlert dialog = new ResultDialogAlert();
 //                    Bundle bundle = new Bundle();
 //                    bundle.putInt("count",guessCount);
 //                    dialog.setArguments(bundle);
-                    dialog.show(getActivity().getFragmentManager(),"temp");
-                  //  dialog.show();
+                    dialog.show(getActivity().getFragmentManager(), "temp");
+                    //  dialog.show();
                 }
 
-            }
-            else
-            {
+            } else {
                 flagImageView.startAnimation(shakeAnimation); // play shake
                 answerTextView.startAnimation(shakeAnimation);
 
@@ -154,13 +151,10 @@ public class MainActivityFragment extends Fragment {
     };
 
     // utility method that disables all answer Buttons
-    public void disableAllButtons()
-    {
-        for(int row=0;row<guessRows;row++)
-        {
+    public void disableAllButtons() {
+        for (int row = 0; row < guessRows; row++) {
             LinearLayout guessRow = guessLinearLayouts[row];
-            for(int i=0;i<guessRow.getChildCount();i++)
-            {
+            for (int i = 0; i < guessRow.getChildCount(); i++) {
                 guessRow.getChildAt(i).setEnabled(false);
             }
         }
@@ -168,9 +162,9 @@ public class MainActivityFragment extends Fragment {
 
     public void updateGuessRows(SharedPreferences sharedPreferences) {
         String choices = sharedPreferences.getString(MainActivity.CHOICES, null);
-        guessRows = Integer.parseInt(choices)/2;
+        guessRows = Integer.parseInt(choices) / 2;
 
-        for(LinearLayout layout: guessLinearLayouts) {
+        for (LinearLayout layout : guessLinearLayouts) {
             layout.setVisibility(View.GONE);
         }
 
@@ -211,16 +205,15 @@ public class MainActivityFragment extends Fragment {
         loadFlags();
     }
 
-        private void loadFlags() {
-
-            String nextImage = quizCountriesList.remove(0);
+    private void loadFlags() {
+        String nextImage = quizCountriesList.remove(0);
 
         correctAnswer = nextImage;
 
         String region = nextImage.substring(0, nextImage.indexOf('-'));
         AssetManager assets = getActivity().getAssets();
 
-        try (InputStream stream = assets.open(region + "/" + nextImage + ".png")){
+        try (InputStream stream = assets.open(region + "/" + nextImage + ".png")) {
             Drawable flag = Drawable.createFromStream(stream, nextImage);
             flagImageView.setImageDrawable(flag);
         } catch (IOException exception) {
@@ -235,10 +228,10 @@ public class MainActivityFragment extends Fragment {
 
         for (int row = 0; row < guessRows; row++) {
             for (int column = 0; column < guessLinearLayouts[row].getChildCount(); column++) {
-                Button newGuessButton = (Button)guessLinearLayouts[row].getChildAt(column);
+                Button newGuessButton = (Button) guessLinearLayouts[row].getChildAt(column);
                 newGuessButton.setEnabled(true);
 
-                String fileName = fileNameList.get((row*2) + column);
+                String fileName = fileNameList.get((row * 2) + column);
                 newGuessButton.setText(getCountryName(fileName));
             }
         }
